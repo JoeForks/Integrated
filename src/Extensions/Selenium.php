@@ -449,7 +449,7 @@ abstract class Selenium extends \PHPUnit_Framework_TestCase implements Emulator,
      */
     protected function newSession()
     {
-        $host = 'http://localhost:4444/wd/hub';
+        $host = $this->getHostAddress();
 
         $this->webDriver = new WebDriver($host);
         $capabilities = [];
@@ -471,5 +471,21 @@ abstract class Selenium extends \PHPUnit_Framework_TestCase implements Emulator,
         }
 
         return 'firefox';
+    }
+
+    /**
+     * Retrieve the user's desired host address for the tests.
+     *
+     * @return string
+     */
+    protected function getHostAddress()
+    {
+        $config = $this->getPackageConfig();
+
+        if (isset($config['selenium'])) {
+            return $config['selenium']['host'];
+        }
+
+        return 'http://localhost:4444/wd/hub';
     }
 }
